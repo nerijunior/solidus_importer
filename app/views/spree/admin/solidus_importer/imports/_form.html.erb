@@ -2,13 +2,67 @@
   <div class="col-4">
     <div class="field">
       <%= f.label :import_type %><br>
-      <%= f.select :import_type, [nil] + @import_types %>
+      <%= f.select :import_type, [nil] + @import_types, {}, id: 'import_type_select' %>
     </div>
   </div>
-  <div class="col-3">
+
+  <div class="col-8" id="csv_upload_fields">
     <div class="field">
       <%= f.label :file %><br>
-      <%= f.file_field :file %>
+      <%= f.file_field :file, accept: '.csv' %>
+    </div>
+  </div>
+
+  <div class="col-8" id="woocommerce_api_fields" style="display: none;">
+    <div class="row">
+      <div class="col-12 field">
+        <%= label_tag :woocommerce_url, "WooCommerce Site URL" %><br>
+        <%= text_field_tag :woocommerce_url, nil, class: 'fullwidth', placeholder: 'https://example.com' %>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-6 field">
+        <%= label_tag :woocommerce_consumer_key, "Consumer Key" %><br>
+        <%= text_field_tag :woocommerce_consumer_key, nil, class: 'fullwidth', placeholder: 'ck_...' %>
+      </div>
+      <div class="col-6 field">
+        <%= label_tag :woocommerce_consumer_secret, "Consumer Secret" %><br>
+        <%= text_field_tag :woocommerce_consumer_secret, nil, class: 'fullwidth', placeholder: 'cs_...' %>
+      </div>
+    </div>
+    <div class="row mt-3" id="woocommerce_order_status_fields" style="display: none;">
+      <div class="col-12 field">
+        <%= label_tag :woocommerce_order_statuses, "Order Statuses to Import" %><br>
+        <% [['wc-pending', 'Pending'], ['wc-processing', 'Processing'], ['wc-on-hold', 'On Hold'], ['wc-completed', 'Completed'], ['wc-pedido-enviado', 'Pedido Enviado']].each do |value, label| %>
+          <label style="margin-right: 12px;">
+            <%= check_box_tag 'woocommerce_order_statuses[]', value, true %> <%= label %>
+          </label>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var select = document.getElementById("import_type_select");
+    var csvFields = document.getElementById("csv_upload_fields");
+    var wooFields = document.getElementById("woocommerce_api_fields");
+    var orderStatusFields = document.getElementById("woocommerce_order_status_fields");
+
+    function toggleFields() {
+      if (select.value && select.value.startsWith("woocommerce")) {
+        csvFields.style.display = "none";
+        wooFields.style.display = "block";
+        orderStatusFields.style.display = select.value === "woocommerce_orders" ? "block" : "none";
+      } else {
+        csvFields.style.display = "block";
+        wooFields.style.display = "none";
+        orderStatusFields.style.display = "none";
+      }
+    }
+
+    select.addEventListener("change", toggleFields);
+    toggleFields(); // Initial check on load
+  });
+</script>

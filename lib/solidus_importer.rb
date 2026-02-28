@@ -9,11 +9,12 @@ require "solidus_importer/base_importer"
 require "solidus_importer/order_importer"
 
 require "solidus_importer/processors/base"
-processors = File.join(__dir__, "solidus_importer/processors/*.rb")
-Dir[processors].sort.each { |file| require file }
+processors = File.join(__dir__, "solidus_importer/processors/**/*.rb")
+Dir[processors].sort.each { |file| require file if file != __FILE__ && file != File.join(__dir__, "solidus_importer/processors/base.rb") }
 
 require "solidus_importer/configuration"
 require "solidus_importer/engine"
+require "solidus_importer/woocommerce"
 require "solidus_importer/process_import"
 require "solidus_importer/process_row"
 

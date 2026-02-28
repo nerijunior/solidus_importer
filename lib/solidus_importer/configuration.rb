@@ -34,6 +34,42 @@ module SolidusImporter
           SolidusImporter::Processors::VariantImages,
           SolidusImporter::Processors::Log
         ]
+      },
+      woocommerce_attributes: {
+        importer: SolidusImporter::BaseImporter,
+        processors: [
+          SolidusImporter::Processors::WooCommerce::Attribute,
+          SolidusImporter::Processors::Log
+        ]
+      },
+      woocommerce_categories: {
+        importer: SolidusImporter::BaseImporter,
+        processors: [
+          SolidusImporter::Processors::WooCommerce::Category,
+          SolidusImporter::Processors::Log
+        ]
+      },
+      woocommerce_customers: {
+        importer: SolidusImporter::BaseImporter,
+        processors: [
+          SolidusImporter::Processors::WooCommerce::Customer,
+          SolidusImporter::Processors::Log
+        ]
+      },
+      woocommerce_orders: {
+        importer: SolidusImporter::BaseImporter,
+        processors: [
+          SolidusImporter::Processors::WooCommerce::Order,
+          SolidusImporter::Processors::Log
+        ]
+      },
+      woocommerce_products: {
+        importer: SolidusImporter::BaseImporter,
+        processors: [
+          SolidusImporter::Processors::WooCommerce::Product,
+          SolidusImporter::Processors::WooCommerce::ProductProperties,
+          SolidusImporter::Processors::Log
+        ]
       }
     }
 

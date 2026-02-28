@@ -61,6 +61,7 @@ admin_breadcrumb(
         <tr>
           <th><%= sort_link @search, :id, t('spree.id') %></th>
           <th><%= sort_link @search, :state, t('spree.state') %></th>
+          <th><%= t('spree.solidus_importer.messages') %></th>
           <th><%= sort_link @search, :updated_at, t('spree.solidus_importer.updated_at') %></th>
           <th class="actions"></th>
         </tr>
@@ -71,6 +72,7 @@ admin_breadcrumb(
           <tr class='solidus_importer_import_row'>
             <td><%= link_to import_row.id.to_s, link_details %></td>
             <td class="solidus_importer state-<%= import_row.state %>"><%= import_row.state %></td>
+            <td><%= import_row.messages.blank? ? '-' : import_row.messages %></td>
             <td><%= l(import_row.updated_at) %></td>
             <td><%= link_to 'Details', link_details, class: 'fa fa-eye icon_link', 'data-action': 'view' %></td>
           </tr>

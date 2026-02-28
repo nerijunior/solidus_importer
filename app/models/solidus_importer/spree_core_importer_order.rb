@@ -2,6 +2,22 @@
 
 module SolidusImporter
   class SpreeCoreImporterOrder < Spree::Core::Importer::Order
+    # Ensure the variant has a price in the order's currency before adding it
+    # to the order. If no price exists, create one using the WooCommerce price.
+    # This prevents "Price is not valid" errors from order.contents.add when
+    # the variant was imported with a different default currency.
+    def self.create_line_item(line_item_hash, order)
+      price = line_item_hash[:price]
+      if price.present?
+        variant = Spree::Variant.find(line_item_hash[:variant_id])
+        pricing_options = Spree::Config.pricing_options_class.new(currency: order.currency)
+        unless variant.price_for_options(pricing_options)
+          variant.prices.create!(amount: price, currency: order.currency)
+        end
+      end
+      super
+    end
+
     def self.import(user, params)
       params = params.to_h
       ActiveRecord::Base.transaction do
